@@ -1,0 +1,7 @@
+top_message_frame = tk.Frame(window_main)
+lbl_line_server = tk.Label(top_message_frame, text="_________________Game Information__________________",fg="green")
+lbl_line_server.pack_forget()
+lbl_line = tk.Label(top_message_frame, text="_________________WELCOME MESSAGE__________________",fg="green").pack()
+lbl_welcome = tk.Label(top_message_frame, text="")
+lbl_welcome.pack()
+top_message_frame.pack(side=tk.TOP)
