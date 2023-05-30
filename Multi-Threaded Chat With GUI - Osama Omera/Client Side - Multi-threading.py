@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Apr 26 20:48:56 2019
 
-@author: CSE
-"""
 
 from socket import *                             # for networking  
 from _thread import *                            #to use threads for every client
