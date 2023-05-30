@@ -1,16 +1,20 @@
+#----------------------------------------------- import the libraries Start -------------------------------------------------------------------
 import tkinter as tk
 from tkinter import *
 import socket
 import threading
 from time import sleep
+#----------------------------------------------- import the libraries End -------------------------------------------------------------------
 
-
+# ----------------------------------------------MAIN Server WINDOW Start -------------------------------------------------------------------
 window = tk.Tk()
 window.title("Server Of The Game")
 window.geometry("450x200")
 border_color = Frame(window, background="red")
 #window.config(bg="#FFF8D6")
+# ----------------------------------------------MAIN Server WINDOW End -------------------------------------------------------------------
 
+#------------------------------------------------ TOP Frame (Start and stop button of server ) Start -------------------------------------------------
 # Top frame consisting of two buttons widgets (i.e. btnStart, btnStop)
 topFrame = tk.Frame(window)
 lblmain = tk.Label(topFrame,text=" OSAMA AYMAN EL-SAYED ",fg='white',bg='blue' )
@@ -22,7 +26,10 @@ btnStart.grid(row=5,column=3,padx=3,pady=3)
 btnStop = tk.Button(topFrame, text="Stop",foreground='white',background='red', command=lambda : stop_server(), state=tk.DISABLED)
 btnStop.grid(row=6,column=3,padx=3,pady=3)
 topFrame.pack(side=tk.LEFT, pady=(5, 5))
+#------------------------------------------------ TOP Frame (Start and stop button of server ) End -------------------------------------------------
 
+
+#------------------------------------------------ Middle Frame (displaying the host and port info ) Start -------------------------------------------------
 # Middle frame consisting of two labels for displaying the host and port info
 middleFrame = tk.Frame(window)
 lblHost = tk.Label(middleFrame, text = "Address: X.X.X.X",foreground='white',bg='red')
@@ -30,7 +37,9 @@ lblHost.grid(row=1, column=3, padx= 3, pady=3)
 lblPort = tk.Label(middleFrame, text = "Port:XXXX",foreground='white',bg='blue')
 lblPort.grid(row=1, column=6, padx= 3, pady=3)
 middleFrame.pack(side=tk.TOP,pady=(3, 0),padx=(0,3))
+#------------------------------------------------ Middle Frame (displaying the host and port info ) End -------------------------------------------------
 
+#------------------------------------------------ Client Frame (names of clients ) Start -------------------------------------------------
 # The client frame shows the client area
 clientFrame = tk.Frame(window)
 lblLine = tk.Label(clientFrame, text="Client List",foreground='white',bg='green').pack()
@@ -41,8 +50,9 @@ tkDisplay.pack(side=tk.LEFT, fill=tk.Y, padx=(5, 0))
 scrollBar.config(command=tkDisplay.yview)
 tkDisplay.config(yscrollcommand=scrollBar.set, background='#FFF8D6', highlightbackground="green", state="disabled")
 clientFrame.pack(side=tk.BOTTOM, pady=(5, 10))
+#------------------------------------------------ Client Frame (names of clients ) End -------------------------------------------------
 
-
+#------------------------------------------------ Network Server Start -------------------------------------------------
 server = None
 HOST_ADDR = "127.0.0.1"
 HOST_PORT = 7002
@@ -50,8 +60,9 @@ client_name = " "
 clients = []
 clients_names = []
 player_data = []
+#------------------------------------------------ Network Server End -------------------------------------------------
 
-
+#------------------------------------------------ Start Function (start server) Start -------------------------------------------------
 # Start server function
 def start_server():
     global server, HOST_ADDR, HOST_PORT # code is fine without this
@@ -71,16 +82,19 @@ def start_server():
 
     lblHost["text"] = "Address: " + HOST_ADDR
     lblPort["text"] = "Port: " + str(HOST_PORT)
+#------------------------------------------------ Start Function (start server) End -------------------------------------------------
 
-
+#------------------------------------------------ Stop Function (Stop server) Start -------------------------------------------------
 # Stop server function
 def stop_server():
     global server
     server.close()
     btnStart.config(state=tk.NORMAL)
     btnStop.config(state=tk.DISABLED)
+#------------------------------------------------ Stop Function (Stop server) End -------------------------------------------------
 
 
+#------------------------------------------------ Accept Function (Accept the clients) Start -------------------------------------------------
 def accept_clients(the_server, y):
     while True:
         if len(clients) < 2:
@@ -90,14 +104,15 @@ def accept_clients(the_server, y):
 
             # use a thread so as not to clog the gui thread
             threading._start_new_thread(send_receive_client_message, (client, addr))
+#------------------------------------------------ Accept Function (Accept the clients) End -------------------------------------------------
+
+
+#------------------------------------------------ Send and Receive Function Start ----------------------------------------------------------
 
 # Function to receive message from current client AND
 # Send that message to other clients
 #Edit 2 ====> change alot of things in that function to slove the problem of bytes and str
 
-
-# Function to receive message from current client AND
-# Send that message to other clients
 def send_receive_client_message(client_connection, client_ip_addr):
     global server, clients, clients_names, player_data
 
@@ -143,21 +158,24 @@ def send_receive_client_message(client_connection, client_ip_addr):
         #print(player_data)
 
     client_connection.close()
+#------------------------------------------------ Send and Receive Function Start ----------------------------------------------------------
 
-
+########################################################################################################################################
 #Return the index of the current client in the list of clients
-def get_client_index(client_list, curr_client):
-    idx = 0
-    for conn in client_list:
-        if conn == curr_client:
-            break
-        idx = idx + 1
+#def get_client_index(client_list, curr_client):
+#    idx = 0
+#    for conn in client_list:
+#        if conn == curr_client:
+#            break
+#        idx = idx + 1
+#
+#    return idx
+########################################################################################################################################
 
-    return idx
-
-
+#------------------------------------------------ Update Client names Function Start ----------------------------------------------------------
 # Update client name display when a new client connects OR
 # When a connected client disconnects
+
 def update_client_names_display(name_list):
     tkDisplay.config(state=tk.NORMAL)
     tkDisplay.delete('1.0', tk.END)
@@ -166,6 +184,8 @@ def update_client_names_display(name_list):
         #Edit 3 ===> solve: display the name of players in server gui
         tkDisplay.insert(tk.END, c.decode()+"\n")
     tkDisplay.config(state=tk.DISABLED)
+#------------------------------------------------ Update Client names Function End ----------------------------------------------------------
 
-
+#------------------------------------------------------- Main loop the main Window Start --------------------------------------------------------------
 window.mainloop()
+#------------------------------------------------------- Main loop the main Window End --------------------------------------------------------------
